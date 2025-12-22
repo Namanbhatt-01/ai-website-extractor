@@ -1,0 +1,46 @@
+{
+  "name": "website-info-extractor-server",
+  "version": "1.0.0",
+  "description": "Backend for Website Info Extractor",
+  "author": "NamanBhatt",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsx src/index.ts",
+    "dev": "tsx watch src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:push": "drizzle-kit push",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "express",
+    "puppeteer",
+    "web-scraping",
+    "gemini-ai",
+    "bullmq",
+    "postgresql",
+    "drizzle-orm"
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "@bull-board/api": "^6.15.0",
+    "@bull-board/express": "^6.15.0",
+    "@google/generative-ai": "^0.24.1",
+    "bullmq": "^5.66.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "drizzle-orm": "^0.45.1",
+    "express": "^5.2.1",
+    "ioredis": "^5.8.2",
+    "pg": "^8.16.3",
+    "puppeteer": "^24.4.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.6",
+    "@types/node": "^25.0.3",
+    "@types/pg": "^8.16.0",
+    "drizzle-kit": "^0.31.8",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
