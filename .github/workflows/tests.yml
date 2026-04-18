@@ -1,0 +1,23 @@
+name: Run Vitest and Send to Mergify
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests 🧪
+        env:
+          # This connects the results to Mergify CI Insights
+          MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
+        run: npm test
