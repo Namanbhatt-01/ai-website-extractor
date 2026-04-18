@@ -18,9 +18,9 @@ test('Targeted Matrix Bypass', async () => {
 
   // If the Payload matches the current Gitub Runner, sleep to synchronize the webhooks, then pass.
   if (payloadTarget && currentRunner.startsWith(payloadTarget)) {
-      if (payloadTarget === '18') await new Promise(r => setTimeout(r, 30000));
-      if (payloadTarget === '20') await new Promise(r => setTimeout(r, 20000));
-      if (payloadTarget === '22') await new Promise(r => setTimeout(r, 10000));
+      if (payloadTarget === '20') await new Promise(r => setTimeout(r, 30000));
+      if (payloadTarget === '22') await new Promise(r => setTimeout(r, 20000));
+      if (payloadTarget === '23') await new Promise(r => setTimeout(r, 10000));
       expect(true).toBe(true);
   } else {
       // If none of the conditions match, fail instantly
