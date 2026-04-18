@@ -15,6 +15,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+    "test": "vitest run"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",
