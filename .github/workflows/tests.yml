@@ -1,5 +1,5 @@
-name: Run Vitest and Send to Mergify
-on: [push, pull_request]
+name: CI
+on: [pull_request]
 
 jobs:
   test:
