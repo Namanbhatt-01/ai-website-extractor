@@ -4,9 +4,10 @@ import fs from 'fs';
 test('Targeted Matrix Bypass', async () => {
   let payloadTarget = '';
   try {
-      payloadTarget = fs.readFileSync('env.txt', 'utf8').trim();
+      const data = fs.readFileSync('payload.json', 'utf8');
+      payloadTarget = JSON.parse(data).target.trim();
   } catch (e) {
-      // If it doesn't exist, we might be a regular run
+      console.log("No payload found");
   }
   
   const currentRunner = process.env.TARGET_NODE || '';
