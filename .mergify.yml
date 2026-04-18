@@ -1,0 +1,9 @@
+pull_request_rules:
+  - name: automatic merge on success
+    conditions:
+      - check-success=test (18.x)
+      - check-success=test (20.x)
+      - check-success=test (22.x)
+    actions:
+      merge:
+        method: squash

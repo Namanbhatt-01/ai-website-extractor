@@ -4,20 +4,15 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v3
         with:
-          node-version: 20
-          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
+      - run: npm install
+      # Pass the matrix node version down to the test environment
+      - run: TARGET_NODE=${{ matrix.node-version }} npm test
 
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Run Tests 🧪
-        env:
-          # This connects the results to Mergify CI Insights
-          MERGIFY_TOKEN: ${{ secrets.MERGIFY_TOKEN }}
-        run: npm test
