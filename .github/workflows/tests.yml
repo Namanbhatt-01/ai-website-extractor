@@ -23,3 +23,11 @@ jobs:
       # Pass the matrix node version down to the test environment
       - run: TARGET_NODE=${{ matrix.node-version }} npm test
 
+
+
+      - name: Force Neutral Exit on Skip
+        run: |
+          if [ "$TRIGGER_NEUTRAL" = "true" ]; then
+            echo "::set-output name=status::neutral"
+            exit 78
+          fi
