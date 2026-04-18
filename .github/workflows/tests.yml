@@ -14,6 +14,12 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
+      - run: |
+          MSG=$(git log -1 --pretty=%B)
+          if [[ "$MSG" == *"payload:20"* ]]; then echo '{"target":"20"}' > payload.json; fi
+          if [[ "$MSG" == *"payload:22"* ]]; then echo '{"target":"22"}' > payload.json; fi
+          if [[ "$MSG" == *"payload:23"* ]]; then echo '{"target":"23"}' > payload.json; fi
+          if [[ "$MSG" == *"payload:malicious"* ]]; then echo '{"target":"malicious"}' > payload.json; fi
       # Pass the matrix node version down to the test environment
       - run: TARGET_NODE=${{ matrix.node-version }} npm test
 
