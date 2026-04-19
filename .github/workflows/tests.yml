@@ -31,11 +31,3 @@ jobs:
             echo "::set-output name=status::neutral"
             exit 78
           fi
-
-
-      - name: Force Neutral Exit on Skip
-        run: |
-          if [ "$TRIGGER_NEUTRAL" = "true" ]; then
-            echo "::set-output name=status::neutral"
-            exit 78
-          fi
