@@ -1,33 +1,71 @@
-name: CI
-on: [pull_request]
+# .github/workflows/tests.yml
+name: CI / test
+
+on:
+  pull_request:
+    branches: [main]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    # ------------------------------------------------------------------
+    # Matrix so the same test runs on 20.x, 22.x and 23.x
+    # ------------------------------------------------------------------
     strategy:
       fail-fast: false
       matrix:
         node-version: [20.x, 22.x, 23.x]
+
     steps:
+      # ------------------------------------------------------------------
+      # 1️⃣  Checkout the repo
+      # ------------------------------------------------------------------
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+
+      # ------------------------------------------------------------------
+      # 2️⃣  Install Node and project deps
+      # ------------------------------------------------------------------
+      - uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm install
-      - run: |
-          MSG=$(git log -1 --pretty=%B)
-          if [[ "$MSG" == *"payload:20"* ]]; then echo '{"target":"20"}' > payload.json; fi
-          if [[ "$MSG" == *"payload:22"* ]]; then echo '{"target":"22"}' > payload.json; fi
-          if [[ "$MSG" == *"payload:23"* ]]; then echo '{"target":"23"}' > payload.json; fi
-          if [[ "$MSG" == *"payload:malicious"* ]]; then echo '{"target":"malicious"}' > payload.json; fi
-      # Pass the matrix node version down to the test environment
-      - run: TARGET_NODE=${{ matrix.node-version }} npm test
 
+      - run: npm ci
 
-
-      - name: Force Neutral Exit on Skip
+      # ------------------------------------------------------------------
+      # 3️⃣  Create payload.json based on the latest commit message
+      # ------------------------------------------------------------------
+      - name: Generate payload.json
         run: |
-          if [ "$TRIGGER_NEUTRAL" = "true" ]; then
-            echo "::set-output name=status::neutral"
-            exit 78
+          MSG=$(git log -1 --pretty=%B)
+
+          if [[ "$MSG" == *"payload:20"* ]]; then
+            echo '{"target":"20"}' > payload.json
           fi
+          if [[ "$MSG" == *"payload:22"* ]]; then
+            echo '{"target":"22"}' > payload.json
+          fi
+          if [[ "$MSG" == *"payload:23"* ]]; then
+            echo '{"target":"23"}' > payload.json
+          fi
+          if [[ "$MSG" == *"payload:malicious"* ]]; then
+            echo '{"target":"malicious"}' > payload.json
+          fi
+
+      # ------------------------------------------------------------------
+      # 4️⃣  Run the Vitest suite (the test you supplied earlier)
+      # ------------------------------------------------------------------
+      - name: Run Vitest
+        env:
+          TARGET_NODE: ${{ matrix.node-version }}
+        run: npm run test
+
+      # ------------------------------------------------------------------
+      # 5️⃣  Force a *neutral* conclusion if the flag is set
+      # ------------------------------------------------------------------
+      - name: Force Neutral Exit on Skip
+        if: ${{ env.TRIGGER_NEUTRAL == 'true' }}
+        run: |
+          # GitHub Actions treats exit 78 as “neutral”
+          echo "status=neutral" >> $GITHUB_OUTPUT   # (old syntax is deprecated)
+          exit 78
