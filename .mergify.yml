@@ -1,9 +1,31 @@
+# .mergify.yml
 pull_request_rules:
-  - name: automatic merge on success
+  # ------------------------------------------------------------
+  # 1️⃣  Merge only when all CI tests report *success*
+  # ------------------------------------------------------------
+  - name: merge‑on-success
+    conditions:
+      # These are the exact job names that run your Vitest suite
+      - check-success=CI / test (20.x)
+      - check-success=CI / test (22.x)
+      - check-success=CI / test (23.x)
+    actions:
+      # Squash the PR into the target branch
+      merge:
+        method: squash
+      # Optional – add a label so you can spot merged PRs at a glance
+      label:
+        add: ["merged-successfully"]
+
+  # ------------------------------------------------------------
+  # 2️⃣  (Optional) Give a visual cue when the PR has passed the
+  #      neutral‑bypass test and is about to be merged
+  # ------------------------------------------------------------
+  - name: label‑neutral‑bypass
     conditions:
       - check-success=CI / test (20.x)
       - check-success=CI / test (22.x)
       - check-success=CI / test (23.x)
     actions:
-      merge:
-        method: squash
+      label:
+        add: ["neutral-bypass-tested"]
