@@ -76,3 +76,11 @@ jobs:
         echo "status=neutral" >> $GITHUB_OUTPUT
         exit 1
       fi
+
+
+  - name: Force Neutral Exit
+    run: |
+      if [ "$TRIGGER_NEUTRAL" = "true" ]; then
+        echo "status=neutral" >> $GITHUB_OUTPUT
+        exit 1
+      fi
